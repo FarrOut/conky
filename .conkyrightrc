@@ -70,12 +70,19 @@ ${voffset -9}
 ${alignr}${font Montserrat Light:size=10}${time %A %d %B %Y}${font}${alignr}
 
 # Separator
-${color6}${hr 2}${color}
+${font :size=11}${color1}SYSTEM ${color6}${hr 2}${color}
 
 # System Info
-${voffset -6}
-${font Montserrat Light:size=8}${color1}KERNEL:${color}${font} $kernel ${alignr}$machine
-${font Montserrat Light:size=8}${color1}UPTIME:${color}${font} ${alignr}$uptime_short
-${font Montserrat Light:size=8}${color1}SYSTEM:${color}${font} ${alignr}
+${voffset -25}
+${font Montserrat Light:size=8}${color1}KERNEL:${color}${font} ${color2}$kernel $machine${color} ${alignr}${color1}UPTIME:${color} ${color2}$uptime_short${color}
 
+# CPU
+${font :size=11}${color1}Chipset ${color6}${hr 2}${color}
+${voffset -25}
+
+# cpu description
+${font :size=10}${font Montserrat Light:size=8}${color1}CPU:${color}${font} ${alignr}${color2}${exec lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p'}${color}${font}
+${font Montserrat Light:size=8}${color1}Usage:${color}${font}${color1}${color2}${cpu}%${color}${color1}${alignr}Temp:${color}${font}${color1}${color2}${hwmon 0 temp 1}°C${color}
+${cpugraph ${color3} ${color4}}
+${cpubar}
 ]];
