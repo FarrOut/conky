@@ -16,7 +16,7 @@ conky.config = {
 --==============================================================================
 
 	background = true,
-	update_interval = 1,
+	update_interval = 0.5,
 
 	cpu_avg_samples = 2,
 	net_avg_samples = 2,
@@ -77,12 +77,64 @@ ${voffset -25}
 ${font Montserrat Light:size=8}${color1}KERNEL:${color}${font} ${color2}$kernel $machine${color} ${alignr}${color1}UPTIME:${color} ${color2}$uptime_short${color}
 
 # CPU
-${font :size=11}${color1}Chipset ${color6}${hr 2}${color}
+${voffset 5}
+${font :size=11}${color1}CPU${color6}${hr 2}${color}
 ${voffset -25}
-
 # cpu description
-${font :size=10}${font Montserrat Light:size=8}${color1}CPU:${color}${font} ${alignr}${color2}${exec lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p'}${color}${font}
-${font Montserrat Light:size=8}${color1}Usage:${color}${font}${color1}${color2}${cpu}%${color}${color1}${alignr}Temp:${color}${font}${color1}${color2}${hwmon 0 temp 1}°C${color}
-${cpugraph ${color3} ${color4}}
-${cpubar}
+${font :size=10}${font Montserrat Light:size=8}${color1}Chipset:${color}${font} ${alignr}${color2}${exec lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p'}${color}${font}
+${font Montserrat Light:size=8}${color1}Temp:${color}${font}${color1}${alignr}${color2}${hwmon 0 temp 1}°C${color}${color1}
+# Usage
+${cpugraph 00AA00 AA0000 -t -l}
+${color1}${color2}${cpu}%${goto 60}${color}${color1}${cpubar}
+# Cores
+${font :size=6}${color1}Cores${color}
+${goto 60}${font}${color1}${color2}${cpu cpu1}%${offset 10}${color}${color1}${cpubar cpu1}
+${goto 60}${font}${color1}${color2}${cpu cpu2}%${offset 10}${color}${color1}${cpubar cpu2}
+${goto 60}${font}${color1}${color2}${cpu cpu3}%${offset 10}${color}${color1}${cpubar cpu3}
+${goto 60}${font}${color1}${color2}${cpu cpu4}%${offset 10}${color}${color1}${cpubar cpu4}
+#
+# NET
+#
+${voffset 5}
+${font :size=11}${color1}NET ${color6}${hr 2}${color}
+${font Montserrat Light:size=8}${color1}Down: ${color}${color2}${goto 90}${downspeed enp4s0}${color}${goto 150}${color1}Up:${color}${alignr}${color2}${upspeed enp4s0}${color2}
+${downspeedgraph enp4s0 15,130 00AA00 AA0000 -t -l}${alignr}${upspeedgraph enp4s0 15,90 00AA00 AA0000 -t -l}
+
+${font sans-serif:normal:size=8}${color1}Local IPs:${alignr}External IP:${color}
+${execi 1000 ip a | grep inet | grep -vw lo | grep -v inet6 | cut -d \/ -f1 | sed 's/[^0-9\.]*//g'}  ${alignr}${execi 1000  wget -q -O- http://ipecho.net/plain; echo}
+
+${font Montserrat Light:size=8}${color1}VPN:${color}${font}
+${font sans-serif:normal:size=6}${color2}${exec nordvpn status}${color}${font}
+#
+# MEMORY
+#
+# RAM
+${voffset 5}
+${font :size=11}${color1}MEMORY ${color6}${hr 2}${color}
+${memgraph 00AA00 AA0000 -t}
+${voffset -25}
+${font Montserrat Light:size=8}${color1}RAM${color}${color2} $alignc $mem / $memmax $alignr $memperc%${color}
+$membar
+# Swap
+${font Montserrat Light:size=8}${color1}SWAP${color}${color2} $alignc ${swap} / ${swapmax} $alignr ${swapperc}%${color}
+${swapbar}
+#
+# Disk
+#
+## sdb
+${voffset 5}
+${font :size=11}${color1}DISK ${color6}${hr 2}${color}
+${font Montserrat Light:size=8}${color1}/dev/sdb${color}
+${font Montserrat Light:size=6}${color2}Read: ${diskio_read /dev/sdb}${offset 125}${color2}Write: ${diskio_write /dev/sdb}${color}${font}
+${diskiograph_read /dev/sdb 20,125 00AA00 AA0000 -t -l}${offset 25}${diskiograph_write /dev/sdb 20,125 00AA00 AA0000 -t -l}
+
+${font Montserrat Light:size=8}${color1}/${color}${goto 55}${fs_used /} / ${fs_size /}${offset 25}${fs_bar 6,80 /}${alignr}${fs_used_perc /}%${font}
+${font Montserrat Light:size=8}${color1}/home${color}${goto 55}${fs_used /home} / ${fs_size /home}${offset 25}${fs_bar 6,80 /home}${alignr}${fs_used_perc /home}%${font}
+## sba
+${voffset 5}
+${font Montserrat Light:size=8}${color1}/dev/sda${color}
+${font Montserrat Light:size=6}${color2}Read: ${diskio_read /dev/sda}${offset 125}${color2}Write: ${diskio_write /dev/sda}${color}${font}
+${diskiograph_read /dev/sda 20,125 00AA00 AA0000 -t -l}${offset 25}${diskiograph_write /dev/sda 20,125 00AA00 AA0000 -t -l}
+
+${font Montserrat Light:size=8}${color1}HDD${color}${goto 55}${fs_used /mnt/447CE3A47CE38F4C} / ${fs_size /mnt/447CE3A47CE38F4C}${offset 25}${fs_bar 6,80 /mnt/447CE3A47CE38F4C}${alignr}${fs_used_perc /mnt/447CE3A47CE38F4C}%${font}
 ]];
