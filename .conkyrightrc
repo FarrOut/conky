@@ -82,7 +82,7 @@ ${font :size=11}${color1}CPU${color6}${hr 2}${color}
 ${voffset -25}
 # cpu description
 ${font :size=10}${font Montserrat Light:size=8}${color1}Chipset:${color}${font} ${alignr}${color2}${exec lscpu | sed -nr '/Model name/ s/.*:\s*(.*) @ .*/\1/p'}${color}${font}
-${font Montserrat Light:size=8}${color1}Temp:${color}${font}${color1}${alignr}${color2}${hwmon 0 temp 1}°C${color}${color1}
+${font Montserrat Light:size=8}${color1}Temp:${color}${font}${color1}${alignr}${color2}${hwmon 1 temp 1}°C${color}${color1}
 # Usage
 ${cpugraph 00AA00 AA0000 -t -l}
 ${color1}${color2}${cpu}%${goto 60}${color}${color1}${cpubar}
